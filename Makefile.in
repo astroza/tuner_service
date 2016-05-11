@@ -1,0 +1,7 @@
+NAME    = tuner
+CC      = gcc
+CFLAGS  = -g -Wall -fPIC
+LDFLAGS =
+DEFS    =
+INCDIR  = -I.
+OBJECTS = main.o fmlib.o
