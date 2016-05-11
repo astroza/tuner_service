@@ -5,8 +5,9 @@
 #include "fmlib.h"
 #include <stdlib.h>
 
-#define TUNER_DEVICE 	"/dev/radio0"
-#define TUNER_INDEX 	0
+#define TUNER_DEVICE 		"/dev/radio0"
+#define TUNER_INDEX 		0
+#define TUNER_DEFAULT_FREQ 	87.5
 DUDA_REGISTER("V4L2 Tuner Service", "Tuner");
 
 struct tuner radio_tuner;
@@ -37,7 +38,7 @@ static int getpost_double_param(duda_request_t *dr, double *param_value)
 
 void cb_frequency(duda_request_t *dr)
 {
-    static double current_frequency = 89.50;
+    static double current_frequency = TUNER_DEFAULT_FREQ;
     double frequency = current_frequency;
     int status = 200;
 
@@ -81,6 +82,8 @@ int duda_main()
 {
     if(tuner_open(&radio_tuner, TUNER_DEVICE, TUNER_INDEX) != 0)
         return MK_ERROR;
+
+    tuner_set_freq(&radio_tuner, (long long int)(TUNER_DEFAULT_FREQ * 16000), 0);
 
     map->static_add("/frequency", "cb_frequency");
     map->static_add("/volume", "cb_volume");
